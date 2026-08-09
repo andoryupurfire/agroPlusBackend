@@ -9,5 +9,6 @@ import java.util.List;
 @Repository
 public interface VariedadRepository extends JpaRepository<Variedad, Long> {
 
+
     List<Variedad> findByTipoCultivoId(Long tipoCultivoId);
 }

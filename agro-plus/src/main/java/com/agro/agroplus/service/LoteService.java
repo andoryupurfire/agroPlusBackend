@@ -43,7 +43,7 @@ public class LoteService {
 
         Lote loteGuardado = loteRepository.save(lote);
 
-        return MapToResponse(loteGuardado);
+        return mapToResponse(loteGuardado);
 
     }
 
@@ -53,7 +53,7 @@ public class LoteService {
 
         return loteRepository.findByFincaId_Agricultor_Username(username)
                 .stream()
-                .map(this::MapToResponse)
+                .map(this::mapToResponse)
                 .toList();
     }
 
@@ -64,7 +64,7 @@ public class LoteService {
                 .getName();
     }
 
-    private LoteResponse MapToResponse(Lote lote) {
+    private LoteResponse mapToResponse(Lote lote) {
         return new LoteResponse(
                 lote.getId(),
                 lote.getNombre(),
