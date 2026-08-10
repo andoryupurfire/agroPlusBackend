@@ -18,12 +18,14 @@ public class LoteController {
 
     private final LoteService loteService;
 
+    //Endpoint para crear el Lote (POST)
     @PostMapping
     public ResponseEntity<LoteResponse> crearLote(@RequestBody CrearLoteRequest request){
         LoteResponse response = loteService.crearLote(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    //Endpoint para listar los lotes (GET)
     @GetMapping
     public List<LoteResponse> listarMisLotes(){
         return loteService.listarMisLotes();

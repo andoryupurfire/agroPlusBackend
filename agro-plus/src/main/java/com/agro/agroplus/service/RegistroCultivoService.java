@@ -5,6 +5,7 @@ import com.agro.agroplus.dto.registroCultivo.CrearRegistroCultivoRequest;
 import com.agro.agroplus.dto.registroCultivo.RegistroCultivoResponse;
 import com.agro.agroplus.entity.*;
 import com.agro.agroplus.repository.*;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,8 @@ public class RegistroCultivoService {
     private final VariedadRepository variedadRepository;
     private final EtapaFenologicaRepository etapaFenologicaRepository;
 
+    //Metodo para crear Registro Cultivo
+    @Transactional
     public RegistroCultivoResponse crearRegistroCultivo (CrearRegistroCultivoRequest request){
         String username = obtenerUsernameAutenticado();
 
@@ -71,6 +74,50 @@ public class RegistroCultivoService {
         return mapToResponse(registroCultivoGuardado);
     }
 
+
+    //Metodo para avanzar etapaFenologica
+    @Transactional
+    public RegistroCultivoResponse avanzarEtapaFenologica(Long idCultivo){
+
+        //Validamos usuario autenticado
+        String username = obtenerUsernameAutenticado();
+
+        Agricultor agricultor = agricultorRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("Agricultor no encontrado"));
+
+        //Buscar el registroCultivo por su id
+        RegistroCultivo cultivo = registroCultivoRepository.findById(idCultivo)
+                .orElseThrow(()->new RuntimeException("No se encontro el cultivo"));
+
+        //Validar OwnerShip
+        if(!cultivo.getLote().getFinca().getAgricultor().getId().equals(agricultor.getId())){
+            throw new RuntimeException("No tienes permiso sobre ese cultivo");
+        }
+
+        //Obtenemos la etapaActual sobre ese cultivo
+        EtapaFenologica etapaActualCultivo = cultivo.getEtapaActual();
+
+        //Buscamos siguiente etapa
+        Integer siguienteEtapa = etapaActualCultivo.getOrden() + 1;
+
+        //Validacion si hay una etapa
+        Optional<EtapaFenologica> validacionEtapa = etapaFenologicaRepository.findByTipoCultivoIdAndOrden(etapaActualCultivo.getTipoCultivo().getId() ,siguienteEtapa);
+
+        if (!validacionEtapa.isPresent()){
+            throw new RuntimeException("Ya se encuentra en la ultima etapa del cultivo");
+        }
+
+        //Primero sacamos la etapa del optional, la metemos en un objetode EtapaFenologica
+        EtapaFenologica siguienteEtapaEncontrada = validacionEtapa.get();
+
+        //guardamos esa info sobre la etapa actual
+        cultivo.setEtapaActual(siguienteEtapaEncontrada);
+
+        //Actualizamso el campo
+        RegistroCultivo registroCultivoActualizado = registroCultivoRepository.save(cultivo);
+
+        return mapToResponse(registroCultivoActualizado);
+    }
 
     //Metodo para obtener usuario autenticado
     private String obtenerUsernameAutenticado(){
