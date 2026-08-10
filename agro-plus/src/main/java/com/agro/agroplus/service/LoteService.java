@@ -5,6 +5,8 @@ import com.agro.agroplus.dto.lote.LoteResponse;
 import com.agro.agroplus.entity.Agricultor;
 import com.agro.agroplus.entity.Finca;
 import com.agro.agroplus.entity.Lote;
+import com.agro.agroplus.exception.AccesoNoAutorizadoException;
+import com.agro.agroplus.exception.RecursoNoEncontradoException;
 import com.agro.agroplus.repository.AgricultorRepository;
 import com.agro.agroplus.repository.FincaRepository;
 import com.agro.agroplus.repository.LoteRepository;
@@ -26,13 +28,13 @@ public class LoteService {
         String username = obtenerUsernameAutenticado();
 
         Agricultor agricultor = agricultorRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("Agricultor no encontrado"));
+                .orElseThrow(() -> new RecursoNoEncontradoException("Agricultor no encontrado"));
 
         Finca finca = fincaRepository.findById(request.fincaId())
-                .orElseThrow(() -> new RuntimeException("Finca no encontrada"));
+                .orElseThrow(() -> new RecursoNoEncontradoException("Finca no encontrada"));
 
         if(!finca.getAgricultor().getId().equals(agricultor.getId())){
-            throw new RuntimeException("No tienes permiso sobre esa finca");
+            throw new AccesoNoAutorizadoException("No tienes permiso sobre esa finca");
         }
 
         Lote lote = Lote.builder()

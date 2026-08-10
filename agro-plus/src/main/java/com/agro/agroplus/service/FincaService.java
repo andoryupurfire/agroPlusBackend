@@ -4,6 +4,7 @@ import com.agro.agroplus.dto.finca.CrearFincaRequest;
 import com.agro.agroplus.dto.finca.FincaResponse;
 import com.agro.agroplus.entity.Agricultor;
 import com.agro.agroplus.entity.Finca;
+import com.agro.agroplus.exception.RecursoNoEncontradoException;
 import com.agro.agroplus.repository.AgricultorRepository;
 import com.agro.agroplus.repository.FincaRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +24,7 @@ public class FincaService {
         String username = obtenerUsernameAutenticado();
 
         Agricultor agricultor = agricultorRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("Agricultor no encontrado"));
+                .orElseThrow(() -> new RecursoNoEncontradoException("Agricultor no encontrado"));
 
         Finca finca = Finca.builder()
                 .nombre(request.nombre())

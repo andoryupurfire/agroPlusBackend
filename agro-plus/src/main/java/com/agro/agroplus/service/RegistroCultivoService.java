@@ -4,6 +4,9 @@ package com.agro.agroplus.service;
 import com.agro.agroplus.dto.registroCultivo.CrearRegistroCultivoRequest;
 import com.agro.agroplus.dto.registroCultivo.RegistroCultivoResponse;
 import com.agro.agroplus.entity.*;
+import com.agro.agroplus.exception.AccesoNoAutorizadoException;
+import com.agro.agroplus.exception.RecursoNoEncontradoException;
+import com.agro.agroplus.exception.ReglaDeNegocioException;
 import com.agro.agroplus.repository.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -30,27 +33,28 @@ public class RegistroCultivoService {
 
         //Validar si el usuario autenticado existe
         Agricultor agricultor = agricultorRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("Agricultor no encontrado"));
+                .orElseThrow(() -> new RecursoNoEncontradoException("Agricultor no encontrado"));
 
         //Buscar el lote por el lote id donde se esta creando el cultivo
         Lote lote = loteRepository.findById(request.loteId())
-                .orElseThrow(() -> new RuntimeException("Lote no encontrado"));
+                .orElseThrow(() -> new RecursoNoEncontradoException("Lote no encontrado"));
 
         //Validamos si el lote le pertence al agricultor
         if(!lote.getFinca().getAgricultor().getId().equals(agricultor.getId())){
-            throw new RuntimeException("No tienes permiso sobre ese lote");
+            throw new AccesoNoAutorizadoException("No tienes permiso sobre ese lote");
         }
 
         //Buscamos si ya existe un registro activo para este lote
-        Optional<RegistroCultivo>registroActivo = registroCultivoRepository.findByLoteIdAndEstado(request.loteId(), EstadoRegistroCultivo.ACTIVO);
+        Optional<RegistroCultivo>registroActivo = registroCultivoRepository.findByLoteIdAndEstado(
+                request.loteId(), EstadoRegistroCultivo.ACTIVO);
 
         if(registroActivo.isPresent()){
-            throw new RuntimeException("Este lote ya tiene un cultivo activo");
+            throw new ReglaDeNegocioException("Este lote ya tiene un cultivo activo");
         }
 
         //Buscamos la variedad por variedad id
         Variedad variedad = variedadRepository.findById(request.variedadId())
-                .orElseThrow(() -> new RuntimeException("Variedad  no encontrado"));
+                .orElseThrow(() -> new RecursoNoEncontradoException("Variedad  no encontrado"));
 
         //Buscamos la etapa fenologica de orden 1 para esa variedad
 
@@ -58,7 +62,7 @@ public class RegistroCultivoService {
         TipoCultivo tipoCultivo = variedad.getTipoCultivo();
 
         EtapaFenologica etapaInicial = etapaFenologicaRepository.findByTipoCultivoIdAndOrden(tipoCultivo.getId(),1)
-                .orElseThrow(()->new RuntimeException("No se encontro la etapa inicial para este cultivo"));
+                .orElseThrow(()->new RecursoNoEncontradoException("No se encontro la etapa inicial para este cultivo"));
 
         RegistroCultivo registroCultivo = RegistroCultivo.builder()
                 .fechaSiembra(request.fechaSiembra())
@@ -83,15 +87,15 @@ public class RegistroCultivoService {
         String username = obtenerUsernameAutenticado();
 
         Agricultor agricultor = agricultorRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("Agricultor no encontrado"));
+                .orElseThrow(() -> new RecursoNoEncontradoException("Agricultor no encontrado"));
 
         //Buscar el registroCultivo por su id
         RegistroCultivo cultivo = registroCultivoRepository.findById(idCultivo)
-                .orElseThrow(()->new RuntimeException("No se encontro el cultivo"));
+                .orElseThrow(()->new RecursoNoEncontradoException("Cultivo no encontrado"));
 
         //Validar OwnerShip
         if(!cultivo.getLote().getFinca().getAgricultor().getId().equals(agricultor.getId())){
-            throw new RuntimeException("No tienes permiso sobre ese cultivo");
+            throw new AccesoNoAutorizadoException("No tienes permiso sobre ese cultivo");
         }
 
         //Obtenemos la etapaActual sobre ese cultivo
@@ -101,10 +105,11 @@ public class RegistroCultivoService {
         Integer siguienteEtapa = etapaActualCultivo.getOrden() + 1;
 
         //Validacion si hay una etapa
-        Optional<EtapaFenologica> validacionEtapa = etapaFenologicaRepository.findByTipoCultivoIdAndOrden(etapaActualCultivo.getTipoCultivo().getId() ,siguienteEtapa);
+        Optional<EtapaFenologica> validacionEtapa = etapaFenologicaRepository.findByTipoCultivoIdAndOrden(
+                etapaActualCultivo.getTipoCultivo().getId() ,siguienteEtapa);
 
         if (!validacionEtapa.isPresent()){
-            throw new RuntimeException("Ya se encuentra en la ultima etapa del cultivo");
+            throw new ReglaDeNegocioException("Ya se encuentra en la ultima etapa del cultivo");
         }
 
         //Primero sacamos la etapa del optional, la metemos en un objetode EtapaFenologica
