@@ -31,3 +31,21 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Compilados de Maven
+*.class
+
+# IntelliJ
+.idea/
+
+
+# Archivos de configuración con credenciales reales
+application.properties
+application-local.properties
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log

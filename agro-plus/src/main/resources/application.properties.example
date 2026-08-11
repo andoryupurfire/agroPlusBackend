@@ -1,0 +1,8 @@
+spring.datasource.url=jdbc:postgresql://localhost:5432/agro_plus
+spring.datasource.username=TU_USUARIO_AQUI
+spring.datasource.password=TU_PASSWORD_AQUI
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+spring.jpa.open-in-view=false
+server.port=8081
+jwt.secret=TU_SECRETO_JWT_AQUI
