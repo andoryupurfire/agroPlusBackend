@@ -1,0 +1,286 @@
+{
+  "info": {
+    "_postman_id": "a431a881-7cb0-42b2-8efa-5e70d14b288b",
+    "name": "agroPlusBackend",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "38469324"
+  },
+  "item": [
+    {
+      "name": "Lista de Cultivos",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8081/api/catalogos/cultivos",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8081",
+          "path": [
+            "api",
+            "catalogos",
+            "cultivos"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Listar Variedades segun el cultivo",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8081/api/catalogos/cultivos/1/variedades",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8081",
+          "path": [
+            "api",
+            "catalogos",
+            "cultivos",
+            "1",
+            "variedades"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Iniciar sesion",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"username\": \"exampleuser\",\r\n    \"password\": \"examplepassword\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8081/api/auth/login",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8081",
+          "path": [
+            "api",
+            "auth",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Buscar Etapas segun el cultivo",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8081/api/catalogos/cultivos/1/etapas",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8081",
+          "path": [
+            "api",
+            "catalogos",
+            "cultivos",
+            "1",
+            "etapas"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Creacion de Finca",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"nombre\": \"Finca example\",\r\n  \"ubicacion\": \"city\",\r\n  \"areaTotalHectareas\": 10\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8081/api/fincas",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8081",
+          "path": [
+            "api",
+            "fincas"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Creacion de Lotes",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"nombre\": \"lote example\",\r\n    \"tamanoHectareas\": 98,\r\n    \"fincaId\": 1\r\n\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8081/api/lotes",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8081",
+          "path": [
+            "api",
+            "lotes"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Listar Fincas",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8081/api/fincas",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8081",
+          "path": [
+            "api",
+            "fincas"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Listar Lotes",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8081/api/lotes",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8081",
+          "path": [
+            "api",
+            "lotes"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Registro de Usuario",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"nombre\": \"example\",\r\n    \"username\": \"exampleuser\",\r\n    \"password\": \"examplepassword\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8081/api/auth/register",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8081",
+          "path": [
+            "api",
+            "auth",
+            "register"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Creacion de Registro Cultivo",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"fechaSiembra\": \"2026-08-07\",\r\n    \"loteId\": 2,\r\n    \"variedadId\": 10 \r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8081/api/registroCultivo",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8081",
+          "path": [
+            "api",
+            "registroCultivo"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Avanzar Etapa Fenologica de Cultivo",
+      "request": {
+        "method": "PATCH",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8081/api/registroCultivo/4/avanzar-etapa",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8081",
+          "path": [
+            "api",
+            "registroCultivo",
+            "4",
+            "avanzar-etapa"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
