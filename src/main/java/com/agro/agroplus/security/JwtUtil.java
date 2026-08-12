@@ -3,6 +3,7 @@ package com.agro.agroplus.security;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
@@ -10,8 +11,9 @@ import java.util.Date;
 
 @Component
 public class JwtUtil {
-    private static final String SECRET =
-            "agro-plus-secret-key-super-segura-2026-produccion";
+
+    @Value("${jwt.secret}")
+    private String SECRET;
     private static final long EXPIRATION_MS = 86_400_000; // 24 horas
 
     private SecretKey getKey() {
