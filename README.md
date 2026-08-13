@@ -34,7 +34,6 @@ This is an active learning project. Every feature below was built incrementally,
 -  Centralized exception handling with semantically correct HTTP status codes (404 / 403 / 409)
 
 **Designed, not yet implemented**
--  Field activity log (`Actividad`) — fully modeled in the domain design (see ER diagram below) but not yet built into the API
 -  Planting capacity calculator (area → estimated plant count)
 -  AI-assisted modules (contextual lot assistant, computer-vision disease diagnosis) — being developed separately as an integrable microservice by a teammate (Python + FastAPI)
 
@@ -61,7 +60,7 @@ Authentication and route protection are handled with **JWT + Spring Security**.
 ### Entity-relationship diagram
 
 
- ![ER Diagram](docs/er-diagram.png))
+ ![ER Diagram](docs/er-diagram.png)
 
 ---
 
